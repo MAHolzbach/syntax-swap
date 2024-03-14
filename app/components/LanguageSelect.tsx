@@ -1,15 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type TLanguageSelectProps = {
-  setSourceLanguage: (language: string | null) => void;
-  sourceLanguage: string | null;
+  type: string;
+  setSourceLanguage?: (language: string | null) => void;
+  sourceLanguage?: string | null;
+  setDestinationLanguage?: (language: string | null) => void;
+  destinationLanguage?: string | null;
 };
 
 const LanguageSelect = ({
+  type,
   setSourceLanguage,
   sourceLanguage,
+  setDestinationLanguage,
+  destinationLanguage,
 }: TLanguageSelectProps) => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const languages = [
@@ -25,35 +31,66 @@ const LanguageSelect = ({
     "Rust",
   ];
 
+  const languageDropdown = useRef<HTMLInputElement>(null);
+
+  const closeLanguageMenus = (e: any) => {
+    if (toggleMenu && !languageDropdown.current?.contains(e.target)) {
+      setToggleMenu(false);
+    }
+  };
+
+  document.addEventListener("mousedown", closeLanguageMenus);
+
+  const handleLanguageSelect = (language: string) => {
+    if (setSourceLanguage) setSourceLanguage(language);
+
+    if (setDestinationLanguage) setDestinationLanguage(language);
+
+    setToggleMenu(!toggleMenu);
+  };
+
+  const selectedLanguageRenderer = () => {
+    if (type === "source") {
+      return sourceLanguage ?? "Select Source Language";
+    }
+
+    if (type === "destination") {
+      return destinationLanguage ?? "Select Destination Language";
+    }
+  };
+
   return (
-    <div className="w-full mr-2">
+    <div className="relative w-full first-of-type:mr-2" ref={languageDropdown}>
       <button
         onClick={(e) => {
           e.preventDefault();
           setToggleMenu(!toggleMenu);
         }}
-        className="bg-dark border-dark border rounded-md inline-flex items-center justify-center py-1 px-7 text-center text-base font-medium text-white hover:bg-slate-500 disabled:bg-gray-3 disabled:border-gray-3 disabled:text-dark-5 w-full"
+        className="bg-black border-dark border rounded-md inline-flex items-center justify-center py-1 px-7 text-center text-base font-medium text-white hover:bg-slate-500 disabled:bg-gray-3 disabled:border-gray-3 disabled:text-dark-5 w-full"
       >
-        {sourceLanguage ?? "Select Source Language"}
+        {selectedLanguageRenderer()}
       </button>
       <ul
         className={`${
           toggleMenu ? "visible" : "hidden"
-        } bg-dark border-dark border rounded-md mt-2`}
+        } z-10 absolute bg-black border-dark border rounded-md mt-2 w-full`}
       >
         {languages.map((language) => {
-          return (
-            <li
-              key={language}
-              onClick={() => {
-                setSourceLanguage(language);
-                setToggleMenu(!toggleMenu);
-              }}
-              className="p-2 hover:cursor-pointer hover:bg-slate-500"
-            >
-              {language}
-            </li>
-          );
+          if (type === "destination" && language === "Unknown") {
+            return null;
+          } else {
+            return (
+              <li
+                key={language}
+                onClick={() => {
+                  handleLanguageSelect(language);
+                }}
+                className="p-2 hover:cursor-pointer hover:bg-slate-500"
+              >
+                {language}
+              </li>
+            );
+          }
         })}
       </ul>
     </div>
