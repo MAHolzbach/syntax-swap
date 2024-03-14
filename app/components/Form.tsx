@@ -7,21 +7,25 @@ import useSWRMutation from "swr/mutation";
 import Result from "./Result";
 import Submit from "./Submit";
 
-//TODO: Add language select dropdown
-//TODO: Add clear all button
+//TODO: Add personality picker
 //TODO: Add api key input field
 //TODO: Add logic to get/set api key to local storage
 //? Does openai have an auth widget that could be used instead?
 
 const Form = () => {
   const [formValue, setFormValue] = useState("");
+  const [clear, setClear] = useState(false);
+  const [sourceLanguage, setSourceLanguage] = useState<string | null>(null);
+  const [destinationLanguage, setDestinationLanguage] = useState<string | null>(
+    null
+  );
 
   const query = {
     messages: [
       { role: "system", content: "You are a helpful assistant." },
       {
         role: "user",
-        content: `Translate this code into Python: ${formValue}`,
+        content: `Translate this ${sourceLanguage} code into ${destinationLanguage}: ${formValue}`,
       },
     ],
     model: "gpt-3.5-turbo",
@@ -35,33 +39,58 @@ const Form = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(query),
-    }).then((r) => {
-      return r.json();
+    }).then((resp) => {
+      return resp.json();
     });
 
-  const { trigger, data, error } = useSWRMutation(
+  const { trigger, data, isMutating, error } = useSWRMutation(
     "https://api.openai.com/v1/chat/completions",
     fetcher
   );
 
-  if (error) console.error(error);
-
-  // if (isLoading) setResponse("Standby...");
-
-  if (data) {
-    console.log(data);
-  }
-
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    setClear(false);
 
-    trigger();
+    try {
+      trigger();
+    } catch (err) {
+      console.error(err);
+    }
   }
+
+  const handleClear = () => {
+    setClear(true);
+  };
+
+  const setResponse = () => {
+    if (isMutating) return "Converting...";
+
+    if (error)
+      return "There was error. Please ensure you have credits on your openai API key.";
+
+    if (data) return data.choices[0].message.content;
+
+    if (clear) return "";
+
+    return "";
+  };
 
   return (
     <>
-      <Submit setFormValue={setFormValue} handleSubmit={handleSubmit} />
-      <Result response={data ? data.choices[0].message.content : ""} />
+      <Submit
+        setFormValue={setFormValue}
+        handleSubmit={handleSubmit}
+        setSourceLanguage={setSourceLanguage}
+        sourceLanguage={sourceLanguage}
+        setDestinationLanguage={setDestinationLanguage}
+        destinationLanguage={destinationLanguage}
+      />
+      <Result
+        response={setResponse()}
+        clear={clear}
+        handleClear={handleClear}
+      />
     </>
   );
 };
