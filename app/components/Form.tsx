@@ -8,6 +8,7 @@ import Result from "./Result";
 import Submit from "./Submit";
 
 //TODO: Add personality picker
+//TODO: Add copy text button to output field
 //TODO: Add api key input field
 //TODO: Add logic to get/set api key to local storage
 //? Does openai have an auth widget that could be used instead?
@@ -22,7 +23,11 @@ const Form = () => {
 
   const query = {
     messages: [
-      { role: "system", content: "You are a helpful assistant." },
+      {
+        role: "system",
+        content:
+          "You are a helpful senior software developer. Begin the response with the code. Put all comments at the end.",
+      },
       {
         role: "user",
         content: `Translate this ${sourceLanguage} code into ${destinationLanguage}: ${formValue}`,
@@ -88,8 +93,8 @@ const Form = () => {
       />
       <Result
         response={setResponse()}
-        clear={clear}
         handleClear={handleClear}
+        destinationLanguage={destinationLanguage}
       />
     </>
   );

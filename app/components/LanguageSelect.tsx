@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type TLanguageSelectProps = {
   type: string;
@@ -20,26 +20,28 @@ const LanguageSelect = ({
   const [toggleMenu, setToggleMenu] = useState(false);
   const languages = [
     "Unknown",
-    "Javascript",
-    "Java",
-    "Golang",
-    "Python",
-    "C",
-    "C++",
-    "C#",
-    "PHP",
-    "Rust",
+    "javascript",
+    "java",
+    "golang",
+    "python",
+    "c",
+    "c++",
+    "csharp",
+    "php",
+    "rust",
   ];
 
   const languageDropdown = useRef<HTMLInputElement>(null);
 
-  const closeLanguageMenus = (e: any) => {
-    if (toggleMenu && !languageDropdown.current?.contains(e.target)) {
-      setToggleMenu(false);
-    }
-  };
+  useEffect(() => {
+    const closeLanguageMenus = (e: any) => {
+      if (toggleMenu && !languageDropdown.current?.contains(e.target)) {
+        setToggleMenu(false);
+      }
+    };
 
-  document.addEventListener("mousedown", closeLanguageMenus);
+    document.addEventListener("mousedown", closeLanguageMenus);
+  }, [toggleMenu]);
 
   const handleLanguageSelect = (language: string) => {
     if (setSourceLanguage) setSourceLanguage(language);
