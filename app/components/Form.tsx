@@ -4,6 +4,8 @@ import { FormEvent, useState } from "react";
 
 import useSWRMutation from "swr/mutation";
 
+import { FormContext } from "../context";
+
 import Result from "./Result";
 import Submit from "./Submit";
 
@@ -20,6 +22,7 @@ const Form = () => {
   const [destinationLanguage, setDestinationLanguage] = useState<string | null>(
     null
   );
+  const [personality, setPersonality] = useState();
 
   const query = {
     messages: [
@@ -69,6 +72,8 @@ const Form = () => {
   };
 
   const setResponse = () => {
+    if (clear) return "";
+
     if (isMutating) return "Converting...";
 
     if (error)
@@ -76,27 +81,30 @@ const Form = () => {
 
     if (data) return data.choices[0].message.content;
 
-    if (clear) return "";
-
     return "";
   };
 
+  const context = {
+    formValue,
+    setFormValue,
+    handleSubmit,
+    setResponse,
+    handleClear,
+    clear,
+    setClear,
+    sourceLanguage,
+    setSourceLanguage,
+    destinationLanguage,
+    setDestinationLanguage,
+    personality,
+    setPersonality,
+  };
+
   return (
-    <>
-      <Submit
-        setFormValue={setFormValue}
-        handleSubmit={handleSubmit}
-        setSourceLanguage={setSourceLanguage}
-        sourceLanguage={sourceLanguage}
-        setDestinationLanguage={setDestinationLanguage}
-        destinationLanguage={destinationLanguage}
-      />
-      <Result
-        response={setResponse()}
-        handleClear={handleClear}
-        destinationLanguage={destinationLanguage}
-      />
-    </>
+    <FormContext.Provider value={context}>
+      <Submit />
+      <Result />
+    </FormContext.Provider>
   );
 };
 
