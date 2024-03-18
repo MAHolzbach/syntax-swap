@@ -12,11 +12,11 @@ import Submit from "./Submit";
 //TODO: Add personality picker
 //TODO: Add copy text button to output field
 //TODO: Add api key input field
-//TODO: Add logic to get/set api key to local storage
-//? Does openai have an auth widget that could be used instead?
+//TODO: Add logic to get/set api key to local storage (and single use option as an alternative)
 
 const Form = () => {
   const [formValue, setFormValue] = useState("");
+  const [bearer, setBearer] = useState<string | null>(null);
   const [clear, setClear] = useState(false);
   const [sourceLanguage, setSourceLanguage] = useState<string | null>(null);
   const [destinationLanguage, setDestinationLanguage] = useState<string | null>(
@@ -43,7 +43,7 @@ const Form = () => {
     await fetch(url, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+        Authorization: `Bearer ${bearer}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(query),
@@ -89,6 +89,8 @@ const Form = () => {
     setFormValue,
     handleSubmit,
     setResponse,
+    bearer,
+    setBearer,
     handleClear,
     clear,
     setClear,

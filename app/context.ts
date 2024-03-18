@@ -3,23 +3,29 @@ import { FormEvent, createContext } from "react";
 type TContext = {
   formValue: string | null;
   setFormValue: (val: string) => void;
-  setResponse: () => "";
-  handleClear: () => void;
   handleSubmit: (e: FormEvent) => void;
-  setSourceLanguage: (language: string | null) => void;
+  setResponse: () => string;
+  bearer: string | null;
+  setBearer: (val: string) => void;
+  clear: boolean;
+  handleClear: () => void;
   sourceLanguage?: string | null;
-  setDestinationLanguage: (language: string | null) => void;
+  setSourceLanguage: (language: string | null) => void;
   destinationLanguage?: string | null;
+  setDestinationLanguage: (language: string | null) => void;
 };
 
 export const FormContext = createContext<TContext>({
   formValue: "",
-  setResponse: () => "",
-  handleClear: () => {},
-  setFormValue: () => {},
+  setFormValue: () => "",
   handleSubmit: () => {},
-  setSourceLanguage: () => {},
+  setResponse: () => "",
+  bearer: "",
+  setBearer: () => null,
+  clear: false,
+  handleClear: () => {},
   sourceLanguage: "",
-  setDestinationLanguage: () => {},
+  setSourceLanguage: () => "",
   destinationLanguage: "",
+  setDestinationLanguage: () => "",
 });

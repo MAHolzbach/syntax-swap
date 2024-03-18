@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import KeyInput from "./KeyInput";
 import LanguageSelect from "./LanguageSelect";
 
 import { FormContext } from "../context";
@@ -7,6 +8,7 @@ const Submit = () => {
   const {
     formValue,
     setFormValue,
+    bearer,
     handleSubmit,
     sourceLanguage,
     destinationLanguage,
@@ -32,12 +34,14 @@ const Submit = () => {
           <LanguageSelect type="source" />
           <LanguageSelect type="destination" />
         </div>
+        <KeyInput />
         <button
           onClick={(e) => handleSubmit(e)}
           disabled={
             sourceLanguage === null ||
             destinationLanguage === null ||
-            !formValue
+            !formValue ||
+            !bearer
           }
           className="bg-black border-dark border rounded-md self-start py-1 px-7 text-center text-base font-medium text-white hover:bg-slate-500 disabled:border-slate-700 disabled:text-slate-700 disabled:hover:bg-black w-full"
         >
