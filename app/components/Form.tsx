@@ -6,23 +6,26 @@ import useSWRMutation from "swr/mutation";
 
 import { FormContext } from "../context";
 
+import KeyInput from "./KeyInput";
 import Result from "./Result";
 import Submit from "./Submit";
 
 //TODO: Add personality picker
 //TODO: Add copy text button to output field
-//TODO: Add api key input field
-//TODO: Add logic to get/set api key to local storage (and single use option as an alternative)
 
 const Form = () => {
   const [formValue, setFormValue] = useState("");
-  const [bearer, setBearer] = useState<string | null>(null);
+  const [bearer, setBearer] = useState<string | null>(
+    //! sessionStorage is undefined here due to SSR.
+    JSON.parse(sessionStorage.getItem("bearer-token") ?? "") || ""
+  );
   const [clear, setClear] = useState(false);
   const [sourceLanguage, setSourceLanguage] = useState<string | null>(null);
   const [destinationLanguage, setDestinationLanguage] = useState<string | null>(
     null
   );
   const [personality, setPersonality] = useState();
+  const [storeToken, setStoreToken] = useState(false);
 
   const query = {
     messages: [
@@ -59,6 +62,9 @@ const Form = () => {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setClear(false);
+
+    if (storeToken)
+      sessionStorage.setItem("bearer-token", JSON.stringify(bearer));
 
     try {
       trigger();
@@ -100,12 +106,19 @@ const Form = () => {
     setDestinationLanguage,
     personality,
     setPersonality,
+    storeToken,
+    setStoreToken,
   };
 
   return (
     <FormContext.Provider value={context}>
-      <Submit />
-      <Result />
+      <div>
+        <KeyInput />
+      </div>
+      <div className="flex flex-col lg:flex-row items-start justify-around w-full">
+        <Submit />
+        <Result />
+      </div>
     </FormContext.Provider>
   );
 };

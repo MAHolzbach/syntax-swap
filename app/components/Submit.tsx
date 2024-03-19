@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import KeyInput from "./KeyInput";
 import LanguageSelect from "./LanguageSelect";
 
 import { FormContext } from "../context";
@@ -34,7 +33,6 @@ const Submit = () => {
           <LanguageSelect type="source" />
           <LanguageSelect type="destination" />
         </div>
-        <KeyInput />
         <button
           onClick={(e) => handleSubmit(e)}
           disabled={

@@ -13,6 +13,8 @@ type TContext = {
   setSourceLanguage: (language: string | null) => void;
   destinationLanguage?: string | null;
   setDestinationLanguage: (language: string | null) => void;
+  storeToken: boolean;
+  setStoreToken: (val: boolean) => void;
 };
 
 export const FormContext = createContext<TContext>({
@@ -28,4 +30,6 @@ export const FormContext = createContext<TContext>({
   setSourceLanguage: () => "",
   destinationLanguage: "",
   setDestinationLanguage: () => "",
+  storeToken: false,
+  setStoreToken: () => false,
 });
