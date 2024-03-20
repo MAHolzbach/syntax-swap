@@ -8,8 +8,8 @@ export default function Home() {
         This simple app allows you to input code from several different
         languages and get it &quot;translated&quot; via openAI&apos;s API.
       </p>
-      <hr className="bg-white w-4/5" />
-      <p className="mb-1">
+      <hr className="bg-white w-full my-4" />
+      <p className="mb-4">
         You will need a dedicated API key from openAI. Please see the
         &quot;Account Setup&quot; section of the OpenAI documentation on how to
         get a free{" "}

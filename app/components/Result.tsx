@@ -10,7 +10,7 @@ import plaintext from "highlight.js/lib/languages/plaintext";
 import python from "highlight.js/lib/languages/python";
 import rust from "highlight.js/lib/languages/rust";
 
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 
 hljs.registerLanguage("plaintext", plaintext);
 hljs.registerLanguage("javascript", javascript);
@@ -30,13 +30,28 @@ import { FormContext } from "../context";
 const Result = () => {
   const { setResponse, handleClear, destinationLanguage } =
     useContext(FormContext);
+
+  const [copied, setCopied] = useState(false);
+
   useEffect(() => {
     hljs.highlightAll();
   }, []);
 
-  let formatted = hljs.highlight(setResponse().replace(/`{3}/gm, ""), {
+  const response = setResponse().replace(/`{3}/gm, "");
+
+  const formatted = hljs.highlight(response, {
     language: destinationLanguage || "plaintext",
   }).value;
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(response);
+
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
 
   return (
     <div className="my-12 w-full lg:w-5/12">
@@ -56,9 +71,16 @@ const Result = () => {
       <button
         onClick={() => handleClear()}
         disabled={!formatted}
-        className="bg-black border-dark border rounded-md inline-flex items-center justify-center py-1 px-7 text-center text-base font-medium text-white hover:bg-body-color hover:border-body-color disabled:border-slate-700 disabled:text-slate-700 disabled:hover:bg-black"
+        className="bg-black border-dark border rounded-md inline-flex items-center justify-center py-1 px-7 mr-2 text-center text-base font-medium text-white hover:bg-body-color hover:border-body-color disabled:border-slate-700 disabled:text-slate-700 disabled:hover:bg-black"
       >
         Clear
+      </button>
+      <button
+        onClick={() => handleCopy()}
+        disabled={!formatted}
+        className="bg-black border-dark border rounded-md inline-flex items-center justify-center py-1 px-7 text-center text-base font-medium text-white hover:bg-body-color hover:border-body-color disabled:border-slate-700 disabled:text-slate-700 disabled:hover:bg-black"
+      >
+        {copied ? "Copied!" : "Copy"}
       </button>
     </div>
   );

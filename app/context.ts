@@ -5,7 +5,7 @@ type TContext = {
   setFormValue: (val: string) => void;
   handleSubmit: (e: FormEvent) => void;
   setResponse: () => string;
-  bearer: string | null;
+  bearer: string;
   setBearer: (val: string) => void;
   clear: boolean;
   handleClear: () => void;
@@ -13,8 +13,8 @@ type TContext = {
   setSourceLanguage: (language: string | null) => void;
   destinationLanguage?: string | null;
   setDestinationLanguage: (language: string | null) => void;
-  storeToken: boolean;
-  setStoreToken: (val: boolean) => void;
+  obfuscate: boolean;
+  setObfuscate: (val: boolean) => void;
 };
 
 export const FormContext = createContext<TContext>({
@@ -30,6 +30,6 @@ export const FormContext = createContext<TContext>({
   setSourceLanguage: () => "",
   destinationLanguage: "",
   setDestinationLanguage: () => "",
-  storeToken: false,
-  setStoreToken: () => false,
+  obfuscate: false,
+  setObfuscate: () => false,
 });

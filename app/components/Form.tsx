@@ -1,31 +1,33 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 import useSWRMutation from "swr/mutation";
 
 import { FormContext } from "../context";
 
 import KeyInput from "./KeyInput";
+import PersonalitySelect from "./PersonalitySelect";
 import Result from "./Result";
 import Submit from "./Submit";
 
 //TODO: Add personality picker
-//TODO: Add copy text button to output field
+//TODO: Extract buttons, etc.
 
 const Form = () => {
   const [formValue, setFormValue] = useState("");
-  const [bearer, setBearer] = useState<string | null>(
-    //! sessionStorage is undefined here due to SSR.
-    JSON.parse(sessionStorage.getItem("bearer-token") ?? "") || ""
-  );
+  const [bearer, setBearer] = useState<string>("");
   const [clear, setClear] = useState(false);
   const [sourceLanguage, setSourceLanguage] = useState<string | null>(null);
   const [destinationLanguage, setDestinationLanguage] = useState<string | null>(
     null
   );
   const [personality, setPersonality] = useState();
-  const [storeToken, setStoreToken] = useState(false);
+  const [obfuscate, setObfuscate] = useState(false);
+
+  useEffect(() => {
+    setBearer(sessionStorage.getItem("bearer-token") ?? "");
+  }, []);
 
   const query = {
     messages: [
@@ -54,7 +56,7 @@ const Form = () => {
       return resp.json();
     });
 
-  const { trigger, data, isMutating, error } = useSWRMutation(
+  const { trigger, data, isMutating } = useSWRMutation(
     "https://api.openai.com/v1/chat/completions",
     fetcher
   );
@@ -63,8 +65,7 @@ const Form = () => {
     e.preventDefault();
     setClear(false);
 
-    if (storeToken)
-      sessionStorage.setItem("bearer-token", JSON.stringify(bearer));
+    sessionStorage.setItem("bearer-token", bearer);
 
     try {
       trigger();
@@ -82,10 +83,11 @@ const Form = () => {
 
     if (isMutating) return "Converting...";
 
-    if (error)
-      return "There was error. Please ensure you have credits on your openai API key.";
+    if (data?.error) return data.error.message;
 
-    if (data) return data.choices[0].message.content;
+    if (data?.choices) {
+      return data.choices[0].message.content;
+    }
 
     return "";
   };
@@ -106,15 +108,14 @@ const Form = () => {
     setDestinationLanguage,
     personality,
     setPersonality,
-    storeToken,
-    setStoreToken,
+    obfuscate,
+    setObfuscate,
   };
 
   return (
     <FormContext.Provider value={context}>
-      <div>
-        <KeyInput />
-      </div>
+      <KeyInput />
+      <PersonalitySelect />
       <div className="flex flex-col lg:flex-row items-start justify-around w-full">
         <Submit />
         <Result />
