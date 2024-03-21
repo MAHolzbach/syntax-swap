@@ -11,18 +11,17 @@ import PersonalitySelect from "./PersonalitySelect";
 import Result from "./Result";
 import Submit from "./Submit";
 
-//TODO: Add personality picker
-//TODO: Extract buttons, etc.
-
 const Form = () => {
   const [formValue, setFormValue] = useState("");
   const [bearer, setBearer] = useState<string>("");
   const [clear, setClear] = useState(false);
   const [sourceLanguage, setSourceLanguage] = useState<string | null>(null);
-  const [destinationLanguage, setDestinationLanguage] = useState<string | null>(
-    null
-  );
-  const [personality, setPersonality] = useState();
+  const [destinationLanguage, setDestinationLanguage] = useState<string | null>(null);
+  const [activePersonality, setActivePersonality] = useState({
+    type: "helpful",
+    content: "You are a helpful senior software developer.",
+    text: "Helpful Colleague",
+  });
   const [obfuscate, setObfuscate] = useState(false);
 
   useEffect(() => {
@@ -33,8 +32,7 @@ const Form = () => {
     messages: [
       {
         role: "system",
-        content:
-          "You are a helpful senior software developer. Begin the response with the code. Put all comments at the end.",
+        content: `${activePersonality.content} Begin the response with the code. Put all comments at the end.`,
       },
       {
         role: "user",
@@ -56,10 +54,7 @@ const Form = () => {
       return resp.json();
     });
 
-  const { trigger, data, isMutating } = useSWRMutation(
-    "https://api.openai.com/v1/chat/completions",
-    fetcher
-  );
+  const { trigger, data, isMutating } = useSWRMutation("https://api.openai.com/v1/chat/completions", fetcher);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -106,8 +101,8 @@ const Form = () => {
     setSourceLanguage,
     destinationLanguage,
     setDestinationLanguage,
-    personality,
-    setPersonality,
+    activePersonality,
+    setActivePersonality,
     obfuscate,
     setObfuscate,
   };

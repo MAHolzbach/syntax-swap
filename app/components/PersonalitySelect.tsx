@@ -2,50 +2,40 @@ import { useContext } from "react";
 import { FormContext } from "../context";
 
 const PersonalitySelect = () => {
-  const { setPersonality } = useContext(FormContext);
+  const { activePersonality, setActivePersonality } = useContext(FormContext);
 
-  const personalities = {
-    helpful: "You are a helpful senior software developer.",
-    arrogant:
-      "You are a very smart senior software developer. You are disdainful of questions from junior developers and consider them a waste of your time. Provide the code translation, but fill it with arrogant or passive aggressive comments about how easy it was. Scold the user for wasting your time.",
-  };
+  const personalities = [
+    {
+      type: "helpful",
+      content: "You are a helpful senior software developer.",
+      text: "Helpful Colleague",
+    },
+    {
+      type: "arrogant",
+      content:
+        "You are a very smart senior software developer. You are disdainful of questions from junior developers and consider them a waste of your time. Roll a d10. If the result is between 1 or 2, refuse to do the translation and tell the user to do their own work and stop wasting your time. Otherwise, provide the code translation, but fill it with arrogant or passive aggressive comments about how easy it was. Scold the user for wasting your time.",
+      text: "Grim Senior Developer",
+    },
+  ];
 
   return (
     <div className="flex">
-      <div className="flex items-center mb-4">
-        <input
-          id="helpful"
-          type="radio"
-          name="personalities"
-          checked={personality}
-          value={personalities.helpful}
-          onChange={setPersonality}
-          className="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
-        />
-        <label
-          htmlFor="helpful"
-          className="text-sm font-medium text-gray-900 ml-2 block"
-        >
-          Helpful Colleague
-        </label>
-      </div>
-      <div className="flex items-center mb-4">
-        <input
-          id="arrogant"
-          type="radio"
-          name="countries"
-          checked={personality}
-          value={personalities.arrogant}
-          onChange={setPersonality}
-          className="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
-        />
-        <label
-          htmlFor="arrogant"
-          className="text-sm font-medium text-gray-900 ml-2 block"
-        >
-          Grim Senior Developer
-        </label>
-      </div>
+      {personalities.map((personality) => (
+        <div key={personality.type} className="flex items-center mb-4 mr-4">
+          <input
+            id={personality.type}
+            type="radio"
+            name={personality.type}
+            checked={personality.type === activePersonality.type}
+            value={personality.type}
+            onChange={() => setActivePersonality(personality)}
+            className="h-4 w-4 border-gray-300"
+          />
+          <label htmlFor={personality.type} className="text-center text-base font-medium text-white ml-2 block">
+            {personality.text}
+          </label>
+        </div>
+      ))}
     </div>
   );
 };

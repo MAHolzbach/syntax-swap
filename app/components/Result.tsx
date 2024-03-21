@@ -28,8 +28,7 @@ import "highlight.js/styles/github-dark.css";
 import { FormContext } from "../context";
 
 const Result = () => {
-  const { setResponse, handleClear, destinationLanguage } =
-    useContext(FormContext);
+  const { setResponse, handleClear, destinationLanguage } = useContext(FormContext);
 
   const [copied, setCopied] = useState(false);
 
@@ -55,10 +54,7 @@ const Result = () => {
 
   return (
     <div className="my-12 w-full lg:w-5/12">
-      <label
-        htmlFor="outputCode"
-        className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
-      >
+      <label htmlFor="outputCode" className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">
         Output:
       </label>
       <pre

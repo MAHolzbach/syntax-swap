@@ -2,8 +2,7 @@ import { useContext } from "react";
 import { FormContext } from "../context";
 
 const KeyInput = () => {
-  const { bearer, setBearer, obfuscate, setObfuscate } =
-    useContext(FormContext);
+  const { bearer, setBearer, obfuscate, setObfuscate } = useContext(FormContext);
 
   return (
     <div className="flex items-center justify-center mb-4 w-2/5">
@@ -18,10 +17,7 @@ const KeyInput = () => {
           onChange={(e) => setBearer(e.target.value)}
           value={bearer}
         ></input>
-        <button
-          onClick={() => setObfuscate(!obfuscate)}
-          className="py-1 px-2 bg-slate-700"
-        >
+        <button onClick={() => setObfuscate(!obfuscate)} className="py-1 px-2 bg-slate-700">
           {obfuscate ? "Show" : "Hide"}
         </button>
       </div>

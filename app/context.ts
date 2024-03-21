@@ -1,5 +1,11 @@
 import { FormEvent, createContext } from "react";
 
+type TActivePersonality = {
+  type: string;
+  content: string;
+  text: string;
+};
+
 type TContext = {
   formValue: string | null;
   setFormValue: (val: string) => void;
@@ -13,6 +19,8 @@ type TContext = {
   setSourceLanguage: (language: string | null) => void;
   destinationLanguage?: string | null;
   setDestinationLanguage: (language: string | null) => void;
+  activePersonality: TActivePersonality;
+  setActivePersonality: (activePersonality: TActivePersonality) => void;
   obfuscate: boolean;
   setObfuscate: (val: boolean) => void;
 };
@@ -30,6 +38,8 @@ export const FormContext = createContext<TContext>({
   setSourceLanguage: () => "",
   destinationLanguage: "",
   setDestinationLanguage: () => "",
+  activePersonality: { type: "", content: "", text: "" },
+  setActivePersonality: () => "",
   obfuscate: false,
   setObfuscate: () => false,
 });
