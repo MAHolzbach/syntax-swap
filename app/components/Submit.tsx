@@ -1,29 +1,15 @@
-import { FormEvent } from "react";
+import { useContext } from "react";
 import LanguageSelect from "./LanguageSelect";
 
-type TSubmitProps = {
-  setFormValue: (val: string) => void;
-  handleSubmit: (e: FormEvent) => void;
-  setSourceLanguage: (language: string | null) => void;
-  sourceLanguage: string | null;
-  setDestinationLanguage: (language: string | null) => void;
-  destinationLanguage: string | null;
-};
+import { FormContext } from "../context";
 
-const Submit = ({
-  setFormValue,
-  handleSubmit,
-  setSourceLanguage,
-  sourceLanguage,
-  setDestinationLanguage,
-  destinationLanguage,
-}: TSubmitProps) => {
+const Submit = () => {
+  const { formValue, setFormValue, bearer, handleSubmit, sourceLanguage, destinationLanguage } =
+    useContext(FormContext);
+
   return (
     <form id="inputForm" className="my-12 w-full lg:w-5/12">
-      <label
-        htmlFor="inputCode"
-        className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
-      >
+      <label htmlFor="inputCode" className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">
         Enter/Paste code:
       </label>
       <div className="flex flex-col items-start">
@@ -35,20 +21,12 @@ const Submit = ({
           placeholder="Enter/Paste code here..."
         ></textarea>
         <div className="flex w-full justify-between mb-4">
-          <LanguageSelect
-            type="source"
-            setSourceLanguage={setSourceLanguage}
-            sourceLanguage={sourceLanguage}
-          />
-          <LanguageSelect
-            type="destination"
-            setDestinationLanguage={setDestinationLanguage}
-            destinationLanguage={destinationLanguage}
-          />
+          <LanguageSelect type="source" />
+          <LanguageSelect type="destination" />
         </div>
         <button
           onClick={(e) => handleSubmit(e)}
-          disabled={sourceLanguage === null || destinationLanguage === null}
+          disabled={sourceLanguage === null || destinationLanguage === null || !formValue || !bearer}
           className="bg-black border-dark border rounded-md self-start py-1 px-7 text-center text-base font-medium text-white hover:bg-slate-500 disabled:border-slate-700 disabled:text-slate-700 disabled:hover:bg-black w-full"
         >
           Submit

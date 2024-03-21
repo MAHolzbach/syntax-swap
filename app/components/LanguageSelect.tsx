@@ -1,50 +1,52 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+
+import { FormContext } from "../context";
 
 type TLanguageSelectProps = {
   type: string;
-  setSourceLanguage?: (language: string | null) => void;
-  sourceLanguage?: string | null;
-  setDestinationLanguage?: (language: string | null) => void;
-  destinationLanguage?: string | null;
 };
 
-const LanguageSelect = ({
-  type,
-  setSourceLanguage,
-  sourceLanguage,
-  setDestinationLanguage,
-  destinationLanguage,
-}: TLanguageSelectProps) => {
+const LanguageSelect = ({ type }: TLanguageSelectProps) => {
+  const {
+    setSourceLanguage,
+    sourceLanguage,
+    setDestinationLanguage,
+    destinationLanguage,
+  } = useContext(FormContext);
+
   const [toggleMenu, setToggleMenu] = useState(false);
+
   const languages = [
     "Unknown",
-    "Javascript",
-    "Java",
-    "Golang",
-    "Python",
-    "C",
-    "C++",
-    "C#",
-    "PHP",
-    "Rust",
+    "javascript",
+    "java",
+    "golang",
+    "python",
+    "c",
+    "c++",
+    "csharp",
+    "php",
+    "rust",
   ];
 
   const languageDropdown = useRef<HTMLInputElement>(null);
 
-  const closeLanguageMenus = (e: any) => {
-    if (toggleMenu && !languageDropdown.current?.contains(e.target)) {
-      setToggleMenu(false);
-    }
-  };
+  useEffect(() => {
+    const closeLanguageMenus = (e: any) => {
+      if (toggleMenu && !languageDropdown.current?.contains(e.target)) {
+        setToggleMenu(false);
+      }
+    };
 
-  document.addEventListener("mousedown", closeLanguageMenus);
+    document.addEventListener("mousedown", closeLanguageMenus);
+  }, [toggleMenu]);
 
   const handleLanguageSelect = (language: string) => {
-    if (setSourceLanguage) setSourceLanguage(language);
+    if (type === "source") setSourceLanguage(language);
 
-    if (setDestinationLanguage) setDestinationLanguage(language);
+    if (type === "destination") setDestinationLanguage(language);
 
     setToggleMenu(!toggleMenu);
   };
