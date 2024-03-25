@@ -17,7 +17,11 @@ const KeyInput = () => {
           onChange={(e) => setBearer(e.target.value)}
           value={bearer}
         ></input>
-        <button onClick={() => setObfuscate(!obfuscate)} className="py-1 px-2 bg-slate-700">
+        <button
+          onClick={() => setObfuscate(!obfuscate)}
+          className="py-1 px-2 bg-slate-700 disabled:text-slate-700 disabled:bg-black"
+          disabled={!bearer}
+        >
           {obfuscate ? "Show" : "Hide"}
         </button>
       </div>
