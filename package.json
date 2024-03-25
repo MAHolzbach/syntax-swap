@@ -7,8 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "build:extension2": "next build && npm run lint:build",
     "build:extension": "next build && mv out/_next out/next && rsync -a --exclude='.*' ./extension/ ./out/",
-    "package": "npm run build:extension && zip -r packages/$(date -u +\"%Y-%m-%dT%H:%M:%SZ\").zip out"
+    "lint:build": "mv out/_next out/next && gsed -i 's/\\/_next/\\/next/g' out/**.html && gsed -i 's/\\/__next/\\/next/g' out/**.html && rsync -a --exclude='.*' ./extension/ ./out/"
   },
   "dependencies": {
     "highlight.js": "^11.9.0",
