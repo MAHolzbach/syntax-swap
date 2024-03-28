@@ -1,6 +1,6 @@
 import { FormEvent, createContext } from "react";
 
-type TActivePersonality = {
+export type TActivePersonality = {
   type: string;
   content: string;
   text: string;

@@ -1,11 +1,10 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
-
-import useSWRMutation from "swr/mutation";
+import { FormEvent, useState } from "react";
 
 import { FormContext } from "../context";
 
+import useCreateFetcher from "../hooks/useCreateFetcher";
 import KeyInput from "./KeyInput";
 import PersonalitySelect from "./PersonalitySelect";
 import Result from "./Result";
@@ -13,7 +12,6 @@ import Submit from "./Submit";
 
 const Form = () => {
   const [formValue, setFormValue] = useState("");
-  const [bearer, setBearer] = useState<string>("");
   const [clear, setClear] = useState(false);
   const [sourceLanguage, setSourceLanguage] = useState<string | null>(null);
   const [destinationLanguage, setDestinationLanguage] = useState<string | null>(null);
@@ -24,37 +22,12 @@ const Form = () => {
   });
   const [obfuscate, setObfuscate] = useState(false);
 
-  useEffect(() => {
-    setBearer(sessionStorage.getItem("bearer-token") ?? "");
-  }, []);
-
-  const query = {
-    messages: [
-      {
-        role: "system",
-        content: `${activePersonality.content} Begin the response with the code. Put all comments at the end.`,
-      },
-      {
-        role: "user",
-        content: `Translate this ${sourceLanguage} code into ${destinationLanguage}: ${formValue}`,
-      },
-    ],
-    model: "gpt-3.5-turbo",
-  };
-
-  const fetcher = async (url: string) =>
-    await fetch(url, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${bearer}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(query),
-    }).then((resp) => {
-      return resp.json();
-    });
-
-  const { trigger, data, isMutating } = useSWRMutation("https://api.openai.com/v1/chat/completions", fetcher);
+  const { trigger, data, isMutating, bearer, setBearer } = useCreateFetcher({
+    formValue,
+    sourceLanguage,
+    destinationLanguage,
+    activePersonality,
+  });
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
