@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import LanguageSelect from "./LanguageSelect";
 
 import { FormContext } from "../context";
+import LangSelect from "./LangSelect";
 
 const Submit = () => {
   const { formValue, setFormValue, bearer, handleSubmit, sourceLanguage, destinationLanguage } =
@@ -21,8 +21,8 @@ const Submit = () => {
           placeholder="Enter/Paste code here..."
         ></textarea>
         <div className="flex w-full justify-between mb-4">
-          <LanguageSelect type="source" />
-          <LanguageSelect type="destination" />
+          <LangSelect type="source" />
+          <LangSelect type="destination" />
         </div>
         <button
           onClick={(e) => handleSubmit(e)}
