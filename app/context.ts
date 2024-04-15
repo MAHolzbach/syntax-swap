@@ -15,10 +15,10 @@ type TContext = {
   setBearer: (val: string) => void;
   clear: boolean;
   handleClear: () => void;
-  sourceLanguage?: string | null;
-  setSourceLanguage: (language: string | null) => void;
-  destinationLanguage?: string | null;
-  setDestinationLanguage: (language: string | null) => void;
+  inputLanguage?: string | null;
+  setInputLanguage: (language: string | null) => void;
+  outputLanguage?: string | null;
+  setOutputLanguage: (language: string | null) => void;
   activePersonality: TActivePersonality;
   setActivePersonality: (activePersonality: TActivePersonality) => void;
   obfuscate: boolean;
@@ -34,10 +34,10 @@ export const FormContext = createContext<TContext>({
   setBearer: () => null,
   clear: false,
   handleClear: () => {},
-  sourceLanguage: "",
-  setSourceLanguage: () => "",
-  destinationLanguage: "",
-  setDestinationLanguage: () => "",
+  inputLanguage: "",
+  setInputLanguage: () => "",
+  outputLanguage: "",
+  setOutputLanguage: () => "",
   activePersonality: { type: "", content: "", text: "" },
   setActivePersonality: () => "",
   obfuscate: false,

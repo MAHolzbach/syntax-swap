@@ -3,7 +3,7 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -16,41 +16,42 @@ type TLanguageSelectProps = {
 };
 
 const LangSelect = ({ type }: TLanguageSelectProps) => {
-  const { setSourceLanguage, sourceLanguage, setDestinationLanguage, destinationLanguage } = useContext(FormContext);
+  const { setInputLanguage, inputLanguage, setOutputLanguage, outputLanguage } = useContext(FormContext);
 
   const [toggleMenu, setToggleMenu] = useState(false);
 
   const languages = ["Unknown", "javascript", "java", "golang", "python", "c", "c++", "csharp", "php", "rust"];
 
   const handleLanguageSelect = (language: string) => {
-    if (type === "source") setSourceLanguage(language);
+    if (type === "input") setInputLanguage(language);
 
-    if (type === "destination") setDestinationLanguage(language);
+    if (type === "output") setOutputLanguage(language);
 
     setToggleMenu(!toggleMenu);
   };
 
   const selectedLanguageRenderer = () => {
-    if (type === "source") {
-      return sourceLanguage ?? "Select Source Language";
+    if (type === "input") {
+      return inputLanguage ?? "Select Input Language";
     }
 
-    if (type === "destination") {
-      return destinationLanguage ?? "Select Destination Language";
+    if (type === "output") {
+      return outputLanguage ?? "Select Output Language";
     }
   };
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>{selectedLanguageRenderer()}</DropdownMenuTrigger>
+      <DropdownMenuTrigger className="border rounded-md flex items-center justify-center py-1 text-center hover:bg-slate-500 w-full">
+        {selectedLanguageRenderer()}
+      </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
         {languages.map((language) => {
           if (type === "destination" && language === "Unknown") {
             return null;
           } else {
             return (
-              <li
+              <DropdownMenuItem
                 key={language}
                 onClick={() => {
                   handleLanguageSelect(language);
@@ -58,7 +59,7 @@ const LangSelect = ({ type }: TLanguageSelectProps) => {
                 className="p-2 hover:cursor-pointer hover:bg-slate-500"
               >
                 {language}
-              </li>
+              </DropdownMenuItem>
             );
           }
         })}

@@ -5,7 +5,7 @@ const KeyInput = () => {
   const { bearer, setBearer, obfuscate, setObfuscate } = useContext(FormContext);
 
   return (
-    <div className="flex items-center justify-center mb-4 w-2/5">
+    <div className="flex items-center justify-center mb-4 w-full xl:w-2/5">
       <label htmlFor="bearerInput" className="mr-1">
         OpenAI Key:
       </label>

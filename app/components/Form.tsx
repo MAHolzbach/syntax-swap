@@ -13,8 +13,8 @@ import Submit from "./Submit";
 const Form = () => {
   const [formValue, setFormValue] = useState("");
   const [clear, setClear] = useState(false);
-  const [sourceLanguage, setSourceLanguage] = useState<string | null>(null);
-  const [destinationLanguage, setDestinationLanguage] = useState<string | null>(null);
+  const [inputLanguage, setInputLanguage] = useState<string | null>(null);
+  const [outputLanguage, setOutputLanguage] = useState<string | null>(null);
   const [activePersonality, setActivePersonality] = useState({
     type: "helpful",
     content: "You are a helpful senior software developer.",
@@ -24,8 +24,8 @@ const Form = () => {
 
   const { trigger, data, isMutating, bearer, setBearer } = useCreateFetcher({
     formValue,
-    sourceLanguage,
-    destinationLanguage,
+    inputLanguage,
+    outputLanguage,
     activePersonality,
   });
 
@@ -70,10 +70,10 @@ const Form = () => {
     handleClear,
     clear,
     setClear,
-    sourceLanguage,
-    setSourceLanguage,
-    destinationLanguage,
-    setDestinationLanguage,
+    inputLanguage,
+    setInputLanguage,
+    outputLanguage,
+    setOutputLanguage,
     activePersonality,
     setActivePersonality,
     obfuscate,
