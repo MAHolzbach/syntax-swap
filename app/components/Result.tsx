@@ -25,10 +25,11 @@ hljs.registerLanguage("rust", rust);
 
 import "highlight.js/styles/github-dark.css";
 
+import { Button } from "@/components/ui/button";
 import { FormContext } from "../context";
 
 const Result = () => {
-  const { setResponse, handleClear, destinationLanguage } = useContext(FormContext);
+  const { setResponse, handleClear, outputLanguage } = useContext(FormContext);
 
   const [copied, setCopied] = useState(false);
 
@@ -39,7 +40,7 @@ const Result = () => {
   const response = setResponse().replace(/`{3}/gm, "");
 
   const formatted = hljs.highlight(response, {
-    language: destinationLanguage || "plaintext",
+    language: outputLanguage || "plaintext",
   }).value;
 
   const handleCopy = async () => {
@@ -59,25 +60,29 @@ const Result = () => {
       </label>
       <pre
         id="outputCode"
-        className={`block mb-4 p-2.5 w-full min-h-[422px] focus:min-h-min text-sm text-gray-900 bg-gray-50 rounded-tl-lg rounded-tr-lg rounded-bl-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-gray-300 lg:resize-y !whitespace-pre overflow-x-auto language-${destinationLanguage}`}
+        className={`block mb-4 p-2.5 w-full min-h-[422px] focus:min-h-min text-sm text-gray-900 bg-gray-50 rounded-tl-lg rounded-tr-lg rounded-bl-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-gray-300 lg:resize-y !whitespace-pre overflow-x-auto language-${outputLanguage}`}
         dangerouslySetInnerHTML={{
           __html: formatted,
         }}
       ></pre>
-      <button
-        onClick={() => handleClear()}
-        disabled={!formatted}
-        className="bg-black border-dark border rounded-md inline-flex items-center justify-center py-1 px-7 mr-2 text-center text-base font-medium text-white hover:bg-body-color hover:border-body-color disabled:border-slate-700 disabled:text-slate-700 disabled:hover:bg-black"
-      >
-        Clear
-      </button>
-      <button
-        onClick={() => handleCopy()}
-        disabled={!formatted}
-        className="bg-black border-dark border rounded-md inline-flex items-center justify-center py-1 px-7 text-center text-base font-medium text-white hover:bg-body-color hover:border-body-color disabled:border-slate-700 disabled:text-slate-700 disabled:hover:bg-black"
-      >
-        {copied ? "Copied!" : "Copy"}
-      </button>
+      <div className="flex flex-col w-full mb-4 gap-2 sm:flex-row">
+        <Button
+          variant="outline"
+          onClick={() => handleClear()}
+          disabled={!formatted}
+          className="text-base min-w-40 hover:bg-slate-500 disabled:border-slate-700 disabled:text-slate-700 disabled:hover:bg-black"
+        >
+          Clear
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => handleCopy()}
+          disabled={!formatted}
+          className="text-base min-w-40 hover:bg-slate-500 disabled:border-slate-700 disabled:text-slate-700 disabled:hover:bg-black"
+        >
+          {copied ? "Copied!" : "Copy"}
+        </Button>
+      </div>
     </div>
   );
 };

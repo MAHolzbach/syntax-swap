@@ -4,17 +4,12 @@ import { TActivePersonality } from "../context";
 
 type TUseCreateFetcherArgs = {
   formValue: string | null;
-  sourceLanguage: string | null;
-  destinationLanguage: string | null;
+  inputLanguage: string | null;
+  outputLanguage: string | null;
   activePersonality: TActivePersonality;
 };
 
-const useCreateFetcher = ({
-  formValue,
-  sourceLanguage,
-  destinationLanguage,
-  activePersonality,
-}: TUseCreateFetcherArgs) => {
+const useCreateFetcher = ({ formValue, inputLanguage, outputLanguage, activePersonality }: TUseCreateFetcherArgs) => {
   const [bearer, setBearer] = useState<string>("");
 
   useEffect(() => {
@@ -29,7 +24,7 @@ const useCreateFetcher = ({
       },
       {
         role: "user",
-        content: `Translate this ${sourceLanguage} code into ${destinationLanguage}: ${formValue}`,
+        content: `Translate this ${inputLanguage} code into ${outputLanguage}: ${formValue}`,
       },
     ],
     model: "gpt-3.5-turbo",
